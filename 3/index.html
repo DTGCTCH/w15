@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+		Addiction
+	</title>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+<body>
+	<!--nav-->
+	<div class="primary-nav">
+		<button class="hamburger open-panel nav-toggle">
+		</button>
+		<nav role="navigation" class="menu">
+			<a class="logotype" href="../index.html">Addiction</a>
+			<div class="overflow-container">
+				<ul class="menu-dropdown">
+					<li id="content1"><a href="../1/index.html">Hallucination</a></li>
+					<li id="content2"><a href="../2/index.html">Anxiety</a><li>
+					<li id="content3" class="present"><a href="../3/index.html">&#183;Neural Interference</a></li>
+					<li id="content4"><a href="../4/index.html">Fall Apart</a></li>
+				</ul>
+			</div>
+			<p>
+			Copyright &copy;2023. 김병준<br>
+			2023-2 Web-interaction<br>
+			qudwnsl99@naver.com
+			</p>
+		</nav>
+	</div>
+	<!--벌레-->
+	<input type="range" id="scaleSlider2" value="200" min="200" max="750" >
+	<div id="bugs">
+	</div>
+
+	<script src="https://pixijs.download/v5.3.10/pixi.min.js">
+		import * as PIXI from 'pixi.js';
+	</script>
+	
+	<script type="text/javascript">
+		//nav//
+		document.querySelector('.nav-toggle').addEventListener('click', function() {
+  				document.querySelector('.primary-nav').classList.toggle('openNav');
+		});
+
+		//간지럼//
+		const app = new PIXI.Application({ resizeTo: window, autoDensity: true });
+		document.getElementById('bugs').appendChild(app.view);
+		const sprites = new PIXI.ParticleContainer(2000, {
+		    scale: true,
+		    position: true,
+		    rotation: true,
+		    uvs: true,
+		    alpha: true,
+		});
+		app.stage.addChild(sprites);
+		const maggots = [];
+		const totalSprites = app.renderer instanceof PIXI.Renderer ? 2000 : 100;
+		for (let i = 0; i < totalSprites; i++) {
+		    const dude = PIXI.Sprite.from('https://pixijs.com/assets/maggot_tiny.png');
+		    dude.anchor.set(0.5);
+		    dude.scale.set(0.8 + Math.random() * 0.3);
+		    dude.x = Math.random() * app.screen.width;
+		    dude.y = Math.random() * app.screen.height;
+		    dude.direction = Math.random() * Math.PI * 2;
+		    dude.turningSpeed = Math.random() - 0.8;
+		    dude.speed = (2 + Math.random() * 2) * 0.8;
+		    dude.offset = Math.random() * 100;
+		    maggots.push(dude);
+		    sprites.addChild(dude);
+		}
+		const dudeBoundsPadding = 100;
+		const dudeBounds = new PIXI.Rectangle(
+		    -dudeBoundsPadding,
+		    -dudeBoundsPadding,
+		    app.screen.width + dudeBoundsPadding * 2,
+		    app.screen.height + dudeBoundsPadding * 2,
+		);
+		let tick = 0;
+		let mouseX = 0;
+		let mouseY = 0;
+		const scaleRatio = app.renderer.resolution / window.devicePixelRatio;
+		app.renderer.plugins.interaction.on('mousemove', (event) => {
+		    mouseX = event.data.global.x * scaleRatio;
+		    mouseY = event.data.global.y * scaleRatio;
+		});
+		let sliderValue = 200;
+		const scaleSlider2 = document.getElementById('scaleSlider2');
+		scaleSlider2.value = sliderValue;
+		scaleSlider2.addEventListener('input', () => {
+		    sliderValue = parseInt(scaleSlider2.value, 10);
+		});
+		app.ticker.add(() => {
+		    for (let i = 0; i < maggots.length; i++) {
+		        const dude = maggots[i];
+		        const dx = mouseX - dude.x;
+		        const dy = mouseY - dude.y;
+		        const distanceToCursor = Math.sqrt(dx * dx + dy * dy);
+
+		        // Use sliderValue instead of fixed value 200
+		        if (distanceToCursor < sliderValue) {
+		            dude.direction = Math.atan2(dy, dx) + Math.PI;
+		            dude.x += Math.sin(dude.direction) * dude.speed;
+		            dude.y += Math.cos(dude.direction) * dude.speed;
+		        } else {
+		            dude.direction = Math.atan2(dy, dx);
+		            dude.x += Math.sin(dude.direction) * dude.speed;
+		            dude.y += Math.cos(dude.direction) * dude.speed;
+		        }
+
+		        dude.rotation = -dude.direction + Math.PI;
+
+		        if (dude.x < dudeBounds.x) {
+		            dude.x += dudeBounds.width;
+		        } else if (dude.x > dudeBounds.x + dudeBounds.width) {
+		            dude.x -= dudeBounds.width;
+		        }
+
+		        if (dude.y < dudeBounds.y) {
+		            dude.y += dudeBounds.height;
+		        } else if (dude.y > dudeBounds.y + dudeBounds.height) {
+		            dude.y -= dudeBounds.height;
+		        }
+		    }
+
+		    tick += 0.1;
+		});
+	</script>
+</body>
+</html>

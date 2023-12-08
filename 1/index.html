@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+		Addiction
+	</title>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+<body>
+	<!--nav-->
+	<div class="primary-nav">
+		<button class="hamburger open-panel nav-toggle">
+		</button>
+		<nav role="navigation" class="menu">
+			<a class="logotype" href="../index.html">Addiction</a>
+			<div class="overflow-container">
+				<ul class="menu-dropdown">
+					<li id="content1" class="present"><a href="../1/index.html">&#183;Hallucination</a></li>
+					<li id="content2"><a href="../2/index.html">Anxiety</a><li>
+					<li id="content3"><a href="../3/index.html">Neural Interference</a></li>
+					<li id="content4"><a href="../4/index.html">Fall Apart</a></li>
+				</ul>
+			</div>
+			<p>
+			Copyright &copy;2023. 김병준<br>
+			2023-2 Web-interaction<br>
+			qudwnsl99@naver.com
+			</p>
+		</nav>
+	</div>
+
+	<!--환각-->
+	<input type="range" id="scaleSlider" value="0" class="cont1 hidden">
+    <canvas id="graphCanvas1" class="cont1 canvas1"></canvas>
+    <canvas id="graphCanvas2" class="cont1 canvas2"></canvas>
+	<canvas id="graphCanvas3" class="cont1 canvas3"></canvas>
+
+	<script src="https://pixijs.download/v5.3.10/pixi.min.js">
+		import * as PIXI from 'pixi.js';
+	</script>
+	<script type="text/javascript">
+		//nav//
+		document.querySelector('.nav-toggle').addEventListener('click', function() {
+  				document.querySelector('.primary-nav').classList.toggle('openNav');
+		});
+
+		//환각//
+		function drawGraph(canvas, context, func, scale) {
+		    canvas.width = window.innerWidth;
+		    canvas.height = window.innerHeight;
+		    context.clearRect(0, 0, canvas.width, canvas.height);
+		    context.beginPath();
+		    if (func === 1) {
+		        context.strokeStyle = 'red';
+		        context.lineWidth = 1;
+		        for (let t = 0.01; t <= 2 * Math.PI; t += 0.01) {
+		            const r = scale * (Math.tan(35 * t) + 1 / Math.cos(35 * t));
+		            const x = canvas.width / 2 + r * Math.cos(t);
+		            const y = canvas.height / 2 - r * Math.sin(t);
+		            context.lineTo(x, y);
+		        }
+		    } else if (func === 2) {
+		        for (let t = 0.01; t <= 2 * Math.PI; t += 0.01) {
+		            context.strokeStyle = 'green';
+		            context.lineWidth = 1;
+		            const r = scale * (Math.tan(35 * t) + 1 / Math.cos(35 * t));
+		            const x = canvas.width / 2 + r * Math.cos(t);
+		            const y = canvas.height / 2 - r * Math.sin(t);
+		            context.lineTo(x, y);
+		        }
+		    } else if (func === 3) {
+		        for (let t = 0.01; t <= 2 * Math.PI; t += 0.01) {
+		            context.strokeStyle = 'blue';
+		            context.lineWidth = 1;
+		            const r = scale * (Math.tan(35 * t) + 1 / Math.cos(35 * t));
+		            const x = canvas.width / 2 + r * Math.cos(t);
+		            const y = canvas.height / 2 - r * Math.sin(t);
+		            context.lineTo(x, y);
+		        }
+		    }
+		    context.stroke();
+		}
+
+		const canvas1 = document.getElementById('graphCanvas1');
+        const context1 = canvas1.getContext('2d');
+        const canvas2 = document.getElementById('graphCanvas2');
+        const context2 = canvas2.getContext('2d');
+        const canvas3 = document.getElementById('graphCanvas3');
+        const context3 = canvas3.getContext('2d');
+        document.querySelector('.cont1').classList.remove('hidden');
+
+   		const scaleSlider = document.getElementById('scaleSlider');
+
+        scaleSlider.min = 100;
+        scaleSlider.max = 1100;
+        scaleSlider.value = 100;
+        scaleSlider.step = 1;
+
+		const scale = parseFloat(scaleSlider.value);
+        drawGraph(canvas1, context1, 1, scale);
+        drawGraph(canvas2, context2, 2, scale);
+        drawGraph(canvas3, context3, 3, scale);
+
+        scaleSlider.addEventListener('input', function () {
+            const scale = parseFloat(scaleSlider.value);
+            drawGraph(canvas1, context1, 1, scale);
+            drawGraph(canvas2, context2, 2, scale);
+            drawGraph(canvas3, context3, 3, scale);
+        });
+
+        scaleSlider.addEventListener('input', function () {
+		    const animationSpeed = parseFloat(scaleSlider.value);
+		    const rotate1Animation = document.styleSheets[0].cssRules[3];
+		    rotate1Animation.style.animationDuration = `${3 / animationSpeed * 250}s`;
+		    const rotate2Animation = document.styleSheets[0].cssRules[7];
+		    rotate2Animation.style.animationDuration = `${7 / animationSpeed * 250}s`;
+		    const rotate3Animation = document.styleSheets[0].cssRules[11];
+		    rotate3Animation.style.animationDuration = `${11 / animationSpeed * 250}s`;
+		});
+
+	</script>
+</body>
+</html>

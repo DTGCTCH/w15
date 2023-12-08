@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+		Addiction
+	</title>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+	<style type="text/css">
+		body{
+			cursor: url('medicine.png'), auto;
+		}
+	</style>
+</head>
+<body>
+	<!--nav-->
+	<div class="primary-nav">
+		<button class="hamburger open-panel nav-toggle">
+		</button>
+		<nav role="navigation" class="menu">
+			<a class="logotype" href="../index.html">Addiction</a>
+			<div class="overflow-container">
+				<ul class="menu-dropdown">
+					<li id="content1"><a href="../1/index.html">Hallucination</a></li>
+					<li id="content2" class="present"><a href="../2/index.html">&#183;Anxiety</a><li>
+					<li id="content3"><a href="../3/index.html">Neural Interference</a></li>
+					<li id="content4"><a href="../4/index.html">Fall Apart</a></li>
+				</ul>
+			</div>
+			<p>
+			Copyright &copy;2023. 김병준<br>
+			2023-2 Web-interaction<br>
+			qudwnsl99@naver.com
+			</p>
+		</nav>
+	</div>
+
+	<!--불안-->
+	<div id='eyes' class="eyes">
+		<div id="eye" class="eye">
+			<div class="pupil"></div>
+		</div>
+		<div id="eye" class="eye">
+			<div class="pupil"></div>
+		</div>
+		<div class='border-circle'></div>
+	</div>
+
+	<script src="https://pixijs.download/v5.3.10/pixi.min.js">
+		import * as PIXI from 'pixi.js';
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js">
+	</script>
+	<script type="text/javascript">
+		//nav//
+		document.querySelector('.nav-toggle').addEventListener('click', function() {
+  				document.querySelector('.primary-nav').classList.toggle('openNav');
+		});
+
+		//불안//
+		const eyes = document.getElementById('eyes');
+		const eye = document.getElementById('eye');
+		const pupils = document.querySelectorAll(".eye .pupil");
+		window.addEventListener("mousemove", (e) => {
+		  pupils.forEach((pupil) => {
+		    // get x and y postion of cursor
+		    var rect = pupil.getBoundingClientRect();
+		    var x = (e.pageX - rect.left) / 30 + "px";
+		    var y = (e.pageY - rect.top) / 30 + "px";
+		    pupil.style.transform = "translate3d(" + x + "," + y + ", 0px)";
+		  });
+		});
+		let lastUpdateTime = Date.now();
+		document.addEventListener('mousemove', function (e) {
+			if (Date.now() - lastUpdateTime > 1){
+				const distanceFromCenter = Math.abs(window.innerWidth / 2 - e.clientX);
+		  		const animationDuration = Math.max(2 - distanceFromCenter / 600, 0.2);
+		 		document.querySelector('.border-circle').style.animationDuration = animationDuration + 's';
+			}
+		  	lastUpdateTime = Date.now();	
+		});
+		document.addEventListener('mousemove', function (e) {
+		    const eyes = document.querySelectorAll('.eye');
+		    const borderCircle = document.querySelector('.border-circle');
+		    const distanceFromCenter = Math.abs(window.innerWidth / 2 - e.clientX);
+		    const redValue = Math.min(distanceFromCenter / 3, 255); //
+		    const redColor = `rgba(255, ${255-redValue}, ${255-redValue}, 1)`;
+		    eyes.forEach(eye => {
+		      eye.style.backgroundColor = redColor;
+		    });
+		    borderCircle.style.borderColor = redColor;
+		  });
+	</script>
+</body>
+</html>
